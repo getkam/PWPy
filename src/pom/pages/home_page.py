@@ -10,20 +10,25 @@ class HomePage(PageObjectModelBase):
         self.user_name = self.page.locator("#loginusername")
         self.password = self.page.locator("#loginpassword")
         self.login_button = self.page.get_by_role("button", name="Log in")
+        self.cancel_button = self.page.get_by_label("Log in").get_by_text("Close")
         self.name_of_user = self.page.locator("#nameofuser")
 
     @property
     def default_url(self):
         return self._env.demoblaze_ui_url
 
-    def login(self):
-        try:
-            self.login_link.click()
-            self.user_name.fill(self._env.demoblaze_user)
-            self.password.fill(self._env.demoblaze_password)
-            self.login_button.click()
-        except Exception as e:
-            raise RuntimeError(f"Log In error: {e}")
+    def open_login_modal(self):
+        self.login_link.click()
+
+    def enter_credentials(self, user_name:str, password:str):
+        self.user_name.fill(user_name)
+        self.password.fill(password)
+
+    def submit_login(self):
+        self.login_button.click()
+
+    def cancel_login(self):
+        self.cancel_button.click()
 
     def is_logged_in(self) -> bool:
         try:
@@ -31,3 +36,6 @@ class HomePage(PageObjectModelBase):
             return True
         except AssertionError:
             return False
+
+
+
