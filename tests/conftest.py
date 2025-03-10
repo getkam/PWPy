@@ -16,7 +16,7 @@ def env_config() -> EnvConfig:
 
 @pytest.fixture
 def demoblazer(page: playwright.Page) -> Demoblazer:
-    return Demoblazer(page=page)
+    return Demoblazer(page)
 
 @pytest.fixture
 def home_page(demoblazer:Demoblazer) -> HomePage:
