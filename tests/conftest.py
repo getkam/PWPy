@@ -20,4 +20,12 @@ def demoblazer(page: playwright.Page) -> Demoblazer:
 
 @pytest.fixture
 def home_page(demoblazer:Demoblazer) -> HomePage:
+    demoblazer.home_page.goto()
     return demoblazer.home_page
+
+@pytest.fixture
+def login_set_up(home_page, env_config):
+    home_page.open_login_modal()
+    home_page.enter_credentials(env_config.demoblaze_user, env_config.demoblaze_password)
+    home_page.submit_login()
+    return home_page
