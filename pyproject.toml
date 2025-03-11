@@ -13,6 +13,8 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
+packages = [{ include = "." }]
+package-mode = false
 dependencies = [
     "annotated-types (==0.7.0)",
     "ansi2html (==1.9.2)",
