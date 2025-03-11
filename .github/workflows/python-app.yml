@@ -34,4 +34,4 @@ jobs:
         env:
           QA_ENV_DEMOBLAZE_PASSWORD: ${{ secrets.QA_ENV_DEMOBLAZE_PASSWORD }}
         run: |
-          poetry run pytest --browser=chromium --headed
+          poetry run pytest --browser=chromium
