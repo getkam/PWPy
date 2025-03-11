@@ -1,4 +1,6 @@
 import pydantic_settings
+import os
+
 
 class PlaywrightConfig(pydantic_settings.BaseSettings):
     model_config = pydantic_settings.SettingsConfigDict(
@@ -13,4 +15,4 @@ class EnvConfig(pydantic_settings.BaseSettings):
     )
     demoblaze_ui_url: str
     demoblaze_user: str
-    demoblaze_password: str
+    demoblaze_password: str = os.getenv("QA_ENV_DEMOBLAZE_PASSWORD","")
