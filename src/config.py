@@ -13,6 +13,6 @@ class EnvConfig(pydantic_settings.BaseSettings):
     model_config = pydantic_settings.SettingsConfigDict(
         env_prefix="QA_ENV_", env_file=".env", frozen=True, extra="ignore"
     )
-    demoblaze_ui_url: str
-    demoblaze_user: str
-    demoblaze_password: str = os.getenv("QA_ENV_DEMOBLAZE_PASSWORD","")
+    demoblaze_ui_url: str = os.getenv("QA_ENV_DEMOBLAZE_UI_URL", "https://www.demoblaze.com")
+    demoblaze_user: str = os.getenv("QA_ENV_DEMOBLAZE_USER", "default_user")
+    demoblaze_password: str = os.getenv("QA_ENV_DEMOBLAZE_PASSWORD", "")
