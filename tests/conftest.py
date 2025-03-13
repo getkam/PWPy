@@ -24,8 +24,8 @@ def home_page(page: Page) -> HomePage:
 
 @pytest.fixture(scope="session")
 def context_creation(playwright_config, env_config, playwright:Playwright):
-    #browser = playwright.chromium.launch(headless=playwright_config.headless)
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=playwright_config.headless)
+    #browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
     home_page = HomePage(page)
