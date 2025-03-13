@@ -1,31 +1,48 @@
 import pytest
-import playwright.sync_api as playwright
+from playwright.sync_api import sync_playwright, Playwright, Page
 
 from src.config import PlaywrightConfig, EnvConfig
-from src.pom.demoblazer_pom import Demoblazer
 from src.pom.pages.home_page import HomePage
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def playwright_config() -> PlaywrightConfig:
     return PlaywrightConfig()
 
-@pytest.fixture
+
+@pytest.fixture(scope="session")
 def env_config() -> EnvConfig:
     return EnvConfig()
 
-@pytest.fixture
-def demoblazer(page: playwright.Page) -> Demoblazer:
-    return Demoblazer(page)
 
 @pytest.fixture
-def home_page(demoblazer:Demoblazer) -> HomePage:
-    demoblazer.home_page.goto()
-    return demoblazer.home_page
+def home_page(page: Page) -> HomePage:
+    home_page = HomePage(page)
+    home_page.goto()
+    return home_page
 
-@pytest.fixture
-def login_set_up(home_page, env_config):
+
+@pytest.fixture(scope="session")
+def context_creation(playwright_config, env_config, playwright:Playwright):
+    #browser = playwright.chromium.launch(headless=playwright_config.headless)
+    browser = playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+    home_page = HomePage(page)
+    home_page.goto()
     home_page.open_login_modal()
     home_page.enter_credentials(env_config.demoblaze_user, env_config.demoblaze_password)
     home_page.submit_login()
-    return home_page
+    yield context
+    page.close()
+    browser.close()
+
+
+@pytest.fixture
+def login_set_up(context_creation):
+    page = context_creation.new_page()
+    home_page = HomePage(page)
+    home_page.goto()
+    home_page.reload()
+    yield home_page
+    page.close()

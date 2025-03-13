@@ -1,4 +1,6 @@
 import playwright.sync_api as playwright
+from playwright.async_api import BrowserContext
+
 from src import config
 
 class PageObjectModelBase:
@@ -7,6 +9,9 @@ class PageObjectModelBase:
         self._env: config.EnvConfig = config.EnvConfig()
         self._playwright: config.PlaywrightConfig = config.PlaywrightConfig()
         self._dialog_message = None
+
+    def __getattr__(self, item):
+        return getattr(self._page, item)
 
     @property
     def page(self):
@@ -39,3 +44,5 @@ class PageObjectModelBase:
             already_waited += interval
         return self._dialog_message if self._dialog_message else ""
 
+    def get_context(self)-> BrowserContext:
+        return self._page.context
