@@ -1,18 +1,21 @@
 import pytest
+from playwright.sync_api import expect
 
 @pytest.mark.smoke
 def test_login_positive(home_page, env_config)-> None:
-    home_page.open_login_modal()
-    home_page.enter_credentials(env_config.demoblaze_user, env_config.demoblaze_password)
-    home_page.submit_login()
-    assert home_page.is_logged_in()
+    login_modal = home_page.open_login_modal()
+    login_modal.enter_credentials(env_config.demoblaze_user, env_config.demoblaze_password)
+    login_modal.submit_login()
+    assert home_page.header.is_logged_in_as(env_config.demoblaze_user)
 
 
-def test_login_cancel(home_page) -> None:
-    home_page.open_login_modal()
-    home_page.enter_credentials("unimportant", "unimportant")
-    home_page.cancel_login()
-    assert home_page.is_logged_in() == False
+def test_login_cancel(home_page, env_config) -> None:
+    login_modal = home_page.open_login_modal()
+    login_modal.enter_credentials(env_config.demoblaze_user, env_config.demoblaze_password)
+    login_modal.cancel_login()
+    expect(home_page.header.login).to_be_visible()
+    expect(home_page.header.signup).to_be_visible()
+    expect(home_page.header.username).not_to_be_visible()
 
 
 @pytest.mark.parametrize("user_name, password, alert_msg",
@@ -27,9 +30,9 @@ def test_login_credentials(home_page,env_config, user_name, password, alert_msg)
     if user_name == "$demoblazer_user":
         user_name = env_config.demoblaze_user
 
-    home_page.open_login_modal()
-    home_page.enter_credentials(user_name, password)
+    login_modal = home_page.open_login_modal()
+    login_modal.enter_credentials(user_name, password)
     home_page.handle_dialog()
-    home_page.submit_login()
+    login_modal.submit_login()
     assert alert_msg in home_page.get_dialog_message()
 

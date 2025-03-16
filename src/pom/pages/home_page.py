@@ -1,41 +1,32 @@
 from playwright.sync_api import expect
+
+from src.pom.components.header_component import Header
+from src.pom.components.login_modal import Login
+
 from src.pom.pages.base_pom import PageObjectModelBase
 
 class HomePage(PageObjectModelBase):
     def __init__(self, page):
         super().__init__(page)
-
+        self.header = Header(page)
         # HomePage locators
-        self.login_link = self.page.get_by_role("link", name="Log in")
-        self.user_name = self.page.locator("#loginusername")
-        self.password = self.page.locator("#loginpassword")
-        self.login_button = self.page.get_by_role("button", name="Log in")
-        self.cancel_button = self.page.get_by_label("Log in").get_by_text("Close")
-        self.name_of_user = self.page.locator("#nameofuser")
+
+        self.phone_category = self.page.get_by_role("link", name="Phones")
+        self.laptops_category = self.page.get_by_role("link", name="Laptops")
+        self.monitors_category = self.page.get_by_role("link", name="Monitors")
+
+        self.products = self.page.locator(".card")
 
     @property
     def default_url(self):
         return self._env.demoblaze_ui_url
 
     def open_login_modal(self):
-        self.login_link.click()
+        self.header.click_login()
+        return Login(self._page)
 
-    def enter_credentials(self, user_name:str, password:str):
-        self.user_name.fill(user_name)
-        self.password.fill(password)
-
-    def submit_login(self):
-        self.login_button.click()
-
-    def cancel_login(self):
-        self.cancel_button.click()
-
-    def is_logged_in(self) -> bool:
-        try:
-            expect(self.name_of_user).to_be_visible()
-            return True
-        except AssertionError:
-            return False
-
+    def click_on_product(self, name: str):
+        product_card = self.products.filter(has_text = name).first
+        product_card.locator("a.hrefch").click()
 
 
