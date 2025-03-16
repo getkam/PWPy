@@ -6,7 +6,7 @@ class PlaywrightConfig(pydantic_settings.BaseSettings):
     model_config = pydantic_settings.SettingsConfigDict(
         env_prefix="QA_PLAYWRIGHT_", env_file=".env", frozen=True, extra="ignore"
     )
-    headless: bool = False
+    headless: bool = True
     browser: str = "chromium"
 
 class EnvConfig(pydantic_settings.BaseSettings):
