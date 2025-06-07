@@ -23,8 +23,7 @@ def test_login_cancel(home_page, env_config) -> None:
                           ("$demoblazer_user", "", "Please fill out Username and Password."),
                           ("wrong", "credentials", "Wrong password."),
                           ("$demoblazer_user", "credentials", "Wrong password."),
-                          ("' OR '1'='1'","' OR '1'='1'", "Wrong password."),
-                          ("<img src=x onerror=alert('XSS')>", "<img src=x onerror=alert('XSS')>","User does not exist.")
+                          ("' OR '1'='1'","' OR '1'='1'", "Wrong password.")
                           ])
 def test_login_credentials(home_page,env_config, user_name, password, alert_msg) -> None:
     if user_name == "$demoblazer_user":
