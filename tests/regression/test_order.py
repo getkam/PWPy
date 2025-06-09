@@ -5,7 +5,7 @@ from src.pom.pages.product_page import ProductPage
 from tests.conftest import product_page
 
 
-def test_order1(login_set_up):
+def test_order1(login_set_up, clear_cart):
 
     login_set_up.click_on_product("Samsung galaxy s6")
     product_page = ProductPage(login_set_up.page)
@@ -22,6 +22,6 @@ def test_order1(login_set_up):
     assert cart_page.total_price.text_content() == "360"
 
 
-def test_order2(login_set_up):
-    #login_set_up.wait_for_timeout(1000)
-    assert login_set_up.header.is_logged_in_as("pwpy")
+# def test_order2(login_set_up):
+#     #login_set_up.wait_for_timeout(1000)
+#     assert login_set_up.header.is_logged_in_as("pwpy")

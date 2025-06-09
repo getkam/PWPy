@@ -18,6 +18,9 @@ class Header(PageObjectModelBase):
     def click_logo(self):
         self.logo.click()
 
+    def click_home(self):
+            self.home.click()
+
     def click_contact(self):
         self.contact.click()
 

@@ -38,3 +38,11 @@ class CartPage(PageObjectModelBase):
                 return i + 1
         return 0
 
+    def clear_cart(self):
+        delete_links = self.page.locator("td:nth-child(4)")
+        links_count = delete_links.count()
+        if links_count == 0:
+            return
+        for _ in range(links_count):
+            self.page.locator("td:nth-child(4) > a").first.click()
+            self.page.wait_for_timeout(500)
